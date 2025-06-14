@@ -9,14 +9,17 @@ const Search = () => {
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  // Pagination
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
   const maxPagesToShow = 4;
 
-  // If there is a value associated with searchParams 'q' call the performSearch function and use the query
+  // If there is a value associated with searchParams 'q' or a change to the page, call the performSearch function and use the query
   useEffect(() => {
+    setQuery(searchParams.get('q'));
     if (searchParams.get('q')) {
+      // Set current page to 1 for pagination
       setCurrentPage(parseInt(searchParams.get('page')) || 1);
       performSearch(searchParams.get('q'), parseInt(searchParams.get('page')) || 1);
     }
@@ -28,6 +31,7 @@ const Search = () => {
 
     setLoading(true);
     try {
+      // Set startIndex for number of results in page
       const startIndex = (page - 1) * itemsPerPage;
       const res = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&startIndex=${startIndex}&maxResults=${itemsPerPage}`
@@ -47,8 +51,10 @@ const Search = () => {
     e.preventDefault();
     setCurrentPage(1);
     setSearchParams({ q: query, page: 1 });
+
   };
 
+  // Function to change the content of the page when the page value changes
   const handlePageChange = (page) => {
     setCurrentPage(page);
     setSearchParams({ q: query, page });
