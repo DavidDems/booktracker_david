@@ -38,6 +38,9 @@ const Navbar = () => {
           ))}
         </NavDropdown>
         <SearchBar />
+        <NavLink to="/login">
+          <i className="bi bi-box-arrow-in-right"></i> Login
+        </NavLink>
       </NavLinks>
     </NavbarContainer>
   );
